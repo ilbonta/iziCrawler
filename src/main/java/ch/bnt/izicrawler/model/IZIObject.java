@@ -11,7 +11,6 @@ import ch.bnt.izicrawler.model.dec.Publisher;
 import ch.bnt.izicrawler.model.dec.Reviews;
 import ch.bnt.izicrawler.model.dec.Schedule;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 public class IZIObject implements Serializable {

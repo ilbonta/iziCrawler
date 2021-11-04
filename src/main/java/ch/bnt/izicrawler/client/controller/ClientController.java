@@ -1,50 +1,35 @@
 package ch.bnt.izicrawler.client.controller;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-
-import ch.bnt.izicrawler.utils.Globals;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class GreetingController {
+public class ClientController {
 
-	@Autowired private SearchController searchController;	
-	@Autowired private RestTemplate restTemplate;
+	@Autowired private SearchController searchController;
 
-	@GetMapping("/greeting")
-	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-		model.addAttribute("name", name);
+	@GetMapping("/")
+	public String greeting(Model model) {
+		model.addAttribute("name", "Benvenuto");
 		
-		caller();
-		
-		return "greeting";
+		return "entryPoint";
 	}
 	
-	public void caller() {
-		restTemplate.getInterceptors().add(new ClientHttpRequestInterceptor() {
-			@Override
-			public org.springframework.http.client.ClientHttpResponse intercept(
-					org.springframework.http.HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
-					throws IOException {
-				request.getHeaders().set("X-IZI-API-KEY", Globals.API_KEY);
-				return execution.execute(request, body);
-			}
-		});
+	@GetMapping("/museum/{title}")
+	public ModelAndView getMuseum(@PathVariable(name="title") String title) {
+		ModelAndView mav =  new ModelAndView("result");
 		
-		
+		String json = searchController.searchForMuseum("Musée international d'horlogerie");
+
 		// search for "Geneva"
 //		searchController.searchForObject(restTemplate);
 
 		// search for "horloge"
-		searchController.searchForMuseum(restTemplate);
+		
 		
 		// get "Geneva" data (uuid=10dc8fe9-1905-4084-b143-63af8486bca7)
 //		searchController.getCityByUuid(restTemplate);
@@ -66,6 +51,11 @@ public class GreetingController {
 //			log.info(city.toString());
 //		}
 		
+		
+		
+		mav.addObject("json", json);
+		
+		return mav;
 	}
 
 //	private void printReadableJSON(ResponseEntity<String> response) {

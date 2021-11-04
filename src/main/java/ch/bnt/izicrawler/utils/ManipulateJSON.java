@@ -8,11 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManipulateJSON {
 	
-	public static void printReadableJSON(ResponseEntity<String> response) {
-		JSONObject json = new JSONObject(response); // Convert text to object
-		log.info(json.toString(4));
-	
+	public static String printReadableJSON(ResponseEntity<String> response) {		
+		String body = response.getBody().substring(1, response.getBody().length()).replace("\\", "");		
+		JSONObject json = new JSONObject(body);
+		
 		log.info(response.getBody().replace("\\", ""));
+		
+		return json.toString(4);
 	}
 
 }

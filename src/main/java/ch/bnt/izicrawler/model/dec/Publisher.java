@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import ch.bnt.izicrawler.model.QuerySearch;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data

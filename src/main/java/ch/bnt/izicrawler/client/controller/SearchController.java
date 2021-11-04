@@ -1,11 +1,12 @@
 package ch.bnt.izicrawler.client.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import ch.bnt.izicrawler.model.QuerySearch;
 import ch.bnt.izicrawler.model.IZIObject;
+import ch.bnt.izicrawler.model.QuerySearch;
 import ch.bnt.izicrawler.utils.Globals;
 import ch.bnt.izicrawler.utils.ManipulateJSON;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class SearchController {
+
+	@Autowired private RestTemplate restTemplate;
 	
 	public void searchForCity(RestTemplate restTemplate) {
 		
@@ -27,15 +30,14 @@ public class SearchController {
 			QuerySearch city = cities[i];			
 			log.info(city.toString());
 		}
-		
 	}
 	
-	public void searchForMuseum(RestTemplate restTemplate) {
+	public String searchForMuseum(String title) {
 		
-		String url = Globals.SEARCH_MUSEUM_ENDPOINT + "Musée international d'horlogerie";
+		String url = Globals.SEARCH_MUSEUM_ENDPOINT +title;
 		
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);	
-		ManipulateJSON.printReadableJSON(response);
+		return ManipulateJSON.printReadableJSON(response);
 		
 //		City[] cities = restTemplate.getForObject(Globals.SEARCH_CITY_ENDPOINT + "horloge", City[].class);
 //		
@@ -43,8 +45,12 @@ public class SearchController {
 //			City city = cities[i];			
 //			log.info(city.toString());
 //		}
-		String folderName = "MIH";
-		serializeToFileInFolder(folderName);
+//		String folderName = "MIH";
+//		return serializeToFileInFolder(folderName);
+		
+	}
+	
+	private void generateResponseJSON() {
 		
 	}
 	
@@ -53,7 +59,7 @@ public class SearchController {
 		
 	}
 
-	public void getCityByUuid(RestTemplate restTemplate) {
+	public void getCityByUuid() {
 //		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/7061495d-f2bf-43e2-9f3b-e232b2a921b9?languages=en", String.class);
 //		ManipulateJSON.printReadableJSON(response);		
 		
