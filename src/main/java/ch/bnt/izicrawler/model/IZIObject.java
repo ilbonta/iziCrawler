@@ -13,7 +13,7 @@ import ch.bnt.izicrawler.model.dec.Schedule;
 import lombok.Data;
 
 @Data
-public class IZIObject implements Serializable {
+public class IziObject implements Serializable {
 
 	private static final long serialVersionUID = -5639382746766109216L;
 

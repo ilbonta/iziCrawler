@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ClientController {
 
-	@Autowired private SearchController searchController;
+	@Autowired private EndpointCaller ep;
 
 	@GetMapping("/")
 	public String greeting(Model model) {
@@ -19,11 +19,28 @@ public class ClientController {
 		return "entryPoint";
 	}
 	
-	@GetMapping("/museum/{title}")
-	public ModelAndView getMuseum(@PathVariable(name="title") String title) {
+	@GetMapping("/museum")
+	public ModelAndView getMuseum(@RequestParam(name="title") String title) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = searchController.searchForMuseum("Musée international d'horlogerie");
+		ResultBox rb =  new ResultBox(title);
+		
+		String json = ep.searchForMuseum(rb);
+		
+		
+		
+		// GET object
+		// Serialize object
+		// Serialize JSON
+		
+		// GET image
+		// Serialize
+		
+		
+		
+		mav.addObject("json", json);
+		
+//		ManipulateJSON.serializeToFileInFolder(objToPersist, fileName);
 
 		// search for "Geneva"
 //		searchController.searchForObject(restTemplate);
@@ -53,7 +70,6 @@ public class ClientController {
 		
 		
 		
-		mav.addObject("json", json);
 		
 		return mav;
 	}
