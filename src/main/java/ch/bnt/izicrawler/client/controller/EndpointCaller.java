@@ -1,6 +1,6 @@
 package ch.bnt.izicrawler.client.controller;
 
-import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,20 +33,32 @@ public class EndpointCaller {
 		}
 	}
 	
-	public String searchForMuseum(ResultBox rb) {
+	public JSONObject searchForMuseum(ResultBox rb) {
 		
 		String url = Globals.SEARCH_MUSEUM_ENDPOINT +rb.getTitle();
-				
-		ManipulateJSON.persist(rb);
 		
-		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);				
-		rb.setResultJSON(ManipulateJSON.printReadableJSON(response));
+		// Get JSON
+		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+		String body = response.getBody().trim();
+		int start = body.indexOf("[");
+		int end = body.lastIndexOf("]");
+		body = body.substring(start+1, end).trim();
+		JSONObject json = new JSONObject(body);
+		System.out.println(body);
+
+		log.info(response.getBody().replace("\\", ""));
 		
+		rb.setJson(json);
+		rb.setJsonString(body);
+		
+		// Get Object
 		IziObject[] museumArray = restTemplate.getForObject(url, IziObject[].class);
 		rb.setIziObject(museumArray[0]);
 		
-		return rb.getResultJSON(); 
-
+		// Serialize on FS
+		ManipulateJSON.persistIziObject(rb);
+		
+		return rb.getJson();
 	}
 	
 	public void getMuseumByUuid(RestTemplate restTemplate) {

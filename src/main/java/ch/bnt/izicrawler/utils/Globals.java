@@ -21,6 +21,8 @@ public class Globals {
 
 	public static final String GET_OBJECT_ENDPOINT = PROTOCOL +DOMAIN +MTGOBJECTS;
 	public static final String GET_OBJECT_ENDPOINT_GET_PARAM = "?languages=en";
+	
+	public static final String MAIN_OUTPUT_FOLDER = "C:/TempMy/izi/izicrawler/output/";
 
 }
 

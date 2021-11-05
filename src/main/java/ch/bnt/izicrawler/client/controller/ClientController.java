@@ -25,13 +25,13 @@ public class ClientController {
 		
 		ResultBox rb =  new ResultBox(title);
 		
-		String json = ep.searchForMuseum(rb);
+		String json = "ok";
+				ep.searchForMuseum(rb);
+//				.toString();
 		
 		
 		
-		// GET object
-		// Serialize object
-		// Serialize JSON
+
 		
 		// GET image
 		// Serialize

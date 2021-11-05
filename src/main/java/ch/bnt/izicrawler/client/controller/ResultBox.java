@@ -1,5 +1,7 @@
 package ch.bnt.izicrawler.client.controller;
 
+import org.json.JSONObject;
+
 import ch.bnt.izicrawler.model.IziObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,8 @@ public class ResultBox {
 		this.title = title;
 	}
 
-	private String resultJSON;
+	private JSONObject json;
+	private String jsonString;
 
 	private IziObject iziObject;
 	

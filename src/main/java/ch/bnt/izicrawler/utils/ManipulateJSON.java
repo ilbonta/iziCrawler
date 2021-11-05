@@ -1,14 +1,11 @@
 package ch.bnt.izicrawler.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
 
 import ch.bnt.izicrawler.client.controller.ResultBox;
 import lombok.extern.slf4j.Slf4j;
@@ -16,47 +13,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManipulateJSON {
 	
-	public static String printReadableJSON(ResponseEntity<String> response) {		
-		String body = response.getBody().substring(1, response.getBody().length()).replace("\\", "");		
-		JSONObject json = new JSONObject(body);
-		
-		log.info(response.getBody().replace("\\", ""));
-		
-		return json.toString(4);
-	}
-	
-	public static void persist(ResultBox rb) {
+	public static void persistIziObject(ResultBox rb) {
 		
 		// Format reference
 		String folderName = rb.getTitle();
 		folderName = folderName.replaceAll("[^a-zA-Z0-9]", "");
 		folderName = StringUtils.stripAccents(folderName);
-		log.info("FOLDER: " +folderName);
+		
+		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;		
+		// Generate Folder
+		new File(folderPath).mkdirs();
+		log.info("FOLDER: {}", folderPath);
+		
+		// Serialize JSON
+		String jsonFileName = folderName +".json";
+		serializeToFileInFolder(rb.getJsonString(), folderPath +File.separator +jsonFileName);
+
+		// Serialize object
+		String objFileName = folderName +".smrt";		
+		serializeToFileInFolder(rb.getIziObject(), folderPath +File.separator +objFileName);		
 		
 		// File to serialize
-		String jsonFileName = folderName +".json";
-		String objFileName = folderName +".smrt";		
 //		String iconFileName = "icon.png";
 //		String bannerFileName = "banner.png";
-	}
+	}	
 	
-	public static void serializeToFileInFolder(Object objToPersist, String fileName) {
-		try {
-			FileOutputStream f = new FileOutputStream(new File(fileName));
-			ObjectOutputStream o = new ObjectOutputStream(f);
-			
-			o.writeObject(objToPersist);
-			
-			o.close();
-			f.close();
-		} catch (FileNotFoundException e) {
-			log.error("File not found", e); 
-		} catch (IOException e) {
-			log.error("Error initializing stream", e);
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
+	public static void serializeToFileInFolder(Object objToPersist, String fileName) {		
+	    try {
+	    	BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+	    	if(objToPersist instanceof String) {
+	    		writer.write(((String)objToPersist).toString());
+	    	}
+	    	else {
+	    		writer.write(objToPersist.toString());				
+	    	}	    	
+	    	
+			writer.close();
 		}
-
+	    catch (IOException e) {
+			log.error("Error persist file " +fileName, e);
+		}
 	}
 	
 //	public void deserializeFromFile(String fileName) {
