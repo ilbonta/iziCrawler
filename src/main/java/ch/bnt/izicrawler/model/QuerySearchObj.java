@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @Slf4j
-public class QuerySearch implements Serializable {
+public class QuerySearchObj implements Serializable {
 
 	private static final long serialVersionUID = -5639382746766109216L;
 

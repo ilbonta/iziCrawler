@@ -2,7 +2,7 @@ package ch.bnt.izicrawler.client.controller;
 
 import org.json.JSONObject;
 
-import ch.bnt.izicrawler.model.IziObject;
+import ch.bnt.izicrawler.model.QuerySearchObj;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +17,7 @@ public class ResultBox {
 	private JSONObject json;
 	private String jsonString;
 
-	private IziObject iziObject;
+	private QuerySearchObj querySearch;
 	
 	private String title;
 

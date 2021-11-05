@@ -31,7 +31,7 @@ public class ManipulateJSON {
 
 		// Serialize object
 		String objFileName = folderName +".smrt";		
-		serializeToFileInFolder(rb.getIziObject(), folderPath +File.separator +objFileName);		
+		serializeToFileInFolder(rb.getQuerySearch(), folderPath +File.separator +objFileName);		
 		
 		// File to serialize
 //		String iconFileName = "icon.png";
@@ -47,7 +47,6 @@ public class ManipulateJSON {
 	    	else {
 	    		writer.write(objToPersist.toString());				
 	    	}	    	
-	    	
 			writer.close();
 		}
 	    catch (IOException e) {

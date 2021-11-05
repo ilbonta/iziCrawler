@@ -25,51 +25,9 @@ public class ClientController {
 		
 		ResultBox rb =  new ResultBox(title);
 		
-		String json = "ok";
-				ep.searchForMuseum(rb);
-//				.toString();
+		String json = ep.searchForMuseum(rb);
 		
-		
-		
-
-		
-		// GET image
-		// Serialize
-		
-		
-		
-		mav.addObject("json", json);
-		
-//		ManipulateJSON.serializeToFileInFolder(objToPersist, fileName);
-
-		// search for "Geneva"
-//		searchController.searchForObject(restTemplate);
-
-		// search for "horloge"
-		
-		
-		// get "Geneva" data (uuid=10dc8fe9-1905-4084-b143-63af8486bca7)
-//		searchController.getCityByUuid(restTemplate);
-		
-		
-
-		// 
-//		ResponseEntity<String> response = restTemplate.getForEntity(Globals.CITY_ENDPOINT + "geneva", String.class);	
-//		
-//		response.getBody().
-		
-//		// Print output
-//		printReadableJSON(response);
-	
-//		City[] cities = restTemplate.getForObject(Globals.CITY_ENDPOINT + "geneva", City[].class);
-//		
-//		for (int i = 0; i < cities.length; i++) {
-//			City city = cities[i];			
-//			log.info(city.toString());
-//		}
-		
-		
-		
+		mav.addObject("json", json);	
 		
 		return mav;
 	}
