@@ -15,6 +15,8 @@ public class ResultBox {
 	public ResultBox(String searchKeyWord) {
 		this.searchKeyWord = searchKeyWord;
 	}
+	
+	private String folderName;
 
 	private JSONObject json;
 	private String jsonString;

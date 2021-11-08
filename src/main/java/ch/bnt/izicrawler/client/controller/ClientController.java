@@ -60,8 +60,10 @@ public class ClientController {
 			@RequestParam(name="imageUuid") String imageUuid,
 			@RequestParam(name="type") String type,
 			@RequestParam(name="ext") String ext) {
+
+		String folderName = "temp";
 		
-		ep.getMedia(contentProviderUuid, imageUuid, type, ext);
+		ep.getMedia(contentProviderUuid, imageUuid, type, ext, folderName);
 		
 		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
 	}

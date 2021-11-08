@@ -14,30 +14,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManipulateJSON {
 	
-	public static void persistIziObject(ResultBox rb) {
-		
-		// Format reference
-		QuerySearchObj museum = rb.getQuerySearchObject();
-		String folderName = museum.getContent_provider().getName();
-		folderName = folderName.replaceAll("[^a-zA-Z0-9]", "");
-		folderName = StringUtils.stripAccents(folderName);
-		
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;		
+	public static void persistIziObject(ResultBox rb) {		
+		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName();
 		// Generate Folder
 		new File(folderPath).mkdirs();
-		log.info("FOLDER: {}", folderPath);
+		log.debug("============= DIR CREATED: {}", folderPath);
 		
 		// Serialize JSON
-		String jsonFileName = folderName +".json";
-		serializeToFileInFolder(rb.getJsonString(), folderPath +File.separator +jsonFileName);
+		String jsonFileName = rb.getFolderName() +".json";
+//		serializeToFileInFolder(rb.getJsonString(), folderPath +File.separator +jsonFileName);
+		log.debug("============= JSON SERIALIZED: {}", jsonFileName);
 
 		// Serialize object
-		String objFileName = folderName +".smrt";		
-		serializeToFileInFolder(rb.getQuerySearchObject(), folderPath +File.separator +objFileName);		
+		String objFileName = rb.getFolderName() +".smrt";		
+//		serializeToFileInFolder(rb.getQuerySearchObject(), folderPath +File.separator +objFileName);
+		log.debug("============= OBJ SERIALIZED: {}", objFileName);
+
+		// Serialize description
+		String descriptionFileName = rb.getFolderName() +"_description.txt";	
+//		serializeToFileInFolder(rb.getQuerySearchObject()., folderPath +File.separator +descriptionFileName);
+		log.debug("============= DESCRIPTION SERIALIZED: {}", descriptionFileName);
 		
-		// File to serialize
-//		String iconFileName = "icon.png";
-//		String bannerFileName = "banner.png";
 	}	
 	
 	public static void serializeToFileInFolder(Object objToPersist, String fileName) {		

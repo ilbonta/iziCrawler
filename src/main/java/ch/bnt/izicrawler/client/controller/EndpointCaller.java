@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class EndpointCaller {
 		
 		for (int i = 0; i < cities.length; i++) {
 			QuerySearchObj city = cities[i];			
-			log.info("============= " +city.toString());
+			log.info("============= CITY: " +city.toString());
 		}
 	}
 	
@@ -52,7 +53,7 @@ public class EndpointCaller {
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 		String body = extractFromArray(response);
 
-		log.info("============= " +response.getBody().replace("\\", ""));
+		log.info("============= GET JSON: " +response.getBody().replace("\\", ""));
 		
 		rb.setJson(new JSONObject(body));
 		rb.setJsonString(body);
@@ -64,8 +65,16 @@ public class EndpointCaller {
 		rb.setQuerySearchObject(museum);
 		
 		// Info
-		log.info("============= Title: {}", museum.getTitle());
-		log.info("============= Disponible languages: {}", museum.getLanguages().toString());
+		log.info("============= TITLE: {}", museum.getTitle());
+		log.info("============= LANGUAGES: {}", museum.getLanguages().toString());
+		
+// Folder name		
+		// Format reference
+		String folderName = museum.getContent_provider().getName();
+		folderName = folderName.replaceAll("[^a-zA-Z0-9]", "");
+		folderName = StringUtils.stripAccents(folderName);
+		rb.setFolderName(folderName);
+		log.info("============= FOLDER NAME: {}", folderName);
 	
 // Serialize on FS
 		ManipulateJSON.persistIziObject(rb);
@@ -74,12 +83,13 @@ public class EndpointCaller {
 //		String uuid = museum.getUuid();
 //		String name = museum.getContent_provider().getName();
 
-		// Get image
+// Get image
 		String contentProviderUuid = museum.getContent_provider().getUuid();
 		String imageLogoUuid = museum.getImages().get(0).getUuid();
 		String imageLogoType = museum.getImages().get(0).getType().trim().toLowerCase();
-		
-		getMedia(contentProviderUuid, imageLogoUuid, imageLogoType, Globals.IMG_LOGO_EXT);
+
+		log.info("============= SAVE LOGO ");
+		getMedia(contentProviderUuid, imageLogoUuid, imageLogoType, Globals.IMG_LOGO_EXT, rb.getFolderName());
 		
 //		logo: https://media.izi.travel/8a6db7f5-da67-4652-9172-bbe4a96f47e8/b23985b4-9d0c-4637-953b-352ccc11738d_800x600.jpg);
 		
@@ -157,44 +167,27 @@ public class EndpointCaller {
 		
 	}
 	
-	public String getMedia(String contentProviderUuid, String imageUuid, String type, String ext) {
+	public String getMedia(String contentProviderUuid, String imageUuid, String type, String ext, String folderName) {
 
 //		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +ext;
 		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +Globals.IMG_SIZE_800x600 +"." +ext;
-		
-//		BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-//
-//		
-////		ResultBox rb =  new ResultBox();
-//		
-//		File file = restTemplate.execute(url, HttpMethod.GET, null, clientHttpResponse -> {
-//		    File ret = File.createTempFile("logo", ".png");
-//		    StreamUtils.copy(clientHttpResponse.getBody(), new FileOutputStream(ret));
-//		    return ret;
-//		});
-		String folderName = "Museinternationaldhorlogerie";
-		String jsonFileName = folderName +"_" +type +"." +ext;
+		log.debug("============= IMG URL: {}", url);		
+
+		String jsonFileName = folderName +"_" +type +"." +ext;	
 		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;	
-//		ManipulateJSON.serializeToFileInFolder(file, folderPath +File.separator +jsonFileName);
 		
 		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
 		
 		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
 	    try {
 	    	BufferedImage bImage2 = ImageIO.read(bis);
-			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName) );
+			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName));
+			log.debug("============= IMG SAVED: {}", folderPath +File.separator +jsonFileName);
 		} catch (IOException e) {
 			log.error("IO error", e);
 		}
-	      System.out.println("image created");
-//		System.out.println("============= " +response.getBody());
 		
-//		String body = extractFromArray(response);
-//
-//		rb.setJsonString(body);
-		
-		return "ok";
-		
+		return "ok";		
 	}
 
 	public void getCityByUuid() {
