@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.bnt.izicrawler.client.controller.ResultBox;
+import ch.bnt.izicrawler.model.QuerySearchObj;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +17,8 @@ public class ManipulateJSON {
 	public static void persistIziObject(ResultBox rb) {
 		
 		// Format reference
-		String folderName = rb.getTitle();
+		QuerySearchObj museum = rb.getQuerySearchObject();
+		String folderName = museum.getContent_provider().getName();
 		folderName = folderName.replaceAll("[^a-zA-Z0-9]", "");
 		folderName = StringUtils.stripAccents(folderName);
 		
@@ -31,7 +33,7 @@ public class ManipulateJSON {
 
 		// Serialize object
 		String objFileName = folderName +".smrt";		
-		serializeToFileInFolder(rb.getQuerySearch(), folderPath +File.separator +objFileName);		
+		serializeToFileInFolder(rb.getQuerySearchObject(), folderPath +File.separator +objFileName);		
 		
 		// File to serialize
 //		String iconFileName = "icon.png";

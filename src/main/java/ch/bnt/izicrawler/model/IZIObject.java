@@ -6,6 +6,7 @@ import java.util.List;
 import ch.bnt.izicrawler.model.dec.Contacts;
 import ch.bnt.izicrawler.model.dec.Content;
 import ch.bnt.izicrawler.model.dec.ContentProvider;
+import ch.bnt.izicrawler.model.dec.Location;
 import ch.bnt.izicrawler.model.dec.Map;
 import ch.bnt.izicrawler.model.dec.Publisher;
 import ch.bnt.izicrawler.model.dec.Reviews;
@@ -42,5 +43,7 @@ public class IziObject implements Serializable {
     private Contacts contacts;
     
     private List<Content> content;
+
+    private Location location;
 
 }

@@ -1,6 +1,8 @@
 package ch.bnt.izicrawler.client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +22,55 @@ public class ClientController {
 	}
 	
 	@GetMapping("/museum")
-	public ModelAndView getMuseum(@RequestParam(name="title") String title) {
+	public ModelAndView getMuseum(@RequestParam(name="searchKeyWord") String searchKeyWord) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		ResultBox rb =  new ResultBox(title);
+		String json = ep.searchForMuseum(searchKeyWord);
 		
-		String json = ep.searchForMuseum(rb);
+		mav.addObject("json", json);	
+		
+		return mav;
+	}
+		
+	@GetMapping("/uuidMin")
+	public ModelAndView getByUuidMinimal(@RequestParam(name="uuid") String uuid) {
+		ModelAndView mav =  new ModelAndView("result");
+		
+		String json = ep.getByUuidMinimal(uuid);
+		
+		mav.addObject("json", json);	
+		
+		return mav;
+	}
+	
+	@GetMapping("/uuidAll")
+	public ModelAndView getByUuidAll(@RequestParam(name="uuid") String uuid) {
+		ModelAndView mav =  new ModelAndView("result");
+		
+		String json = ep.getByUuidAll(uuid);
+		
+		mav.addObject("json", json);	
+		
+		return mav;
+	}
+	
+	@GetMapping("/media")
+	public ResponseEntity<String> getMediaByUuid(
+			@RequestParam(name="contentProviderUuid") String contentProviderUuid,
+			@RequestParam(name="imageUuid") String imageUuid,
+			@RequestParam(name="type") String type,
+			@RequestParam(name="ext") String ext) {
+		
+		ep.getMedia(contentProviderUuid, imageUuid, type, ext);
+		
+		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
+	}
+	
+	@GetMapping("/publisher")
+	public ModelAndView getPublisherByUuid(@RequestParam(name="uuid") String uuid) {
+		ModelAndView mav =  new ModelAndView("result");
+		
+		String json = ep.getPublisherByUuid(uuid);
 		
 		mav.addObject("json", json);	
 		

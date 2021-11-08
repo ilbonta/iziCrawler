@@ -4,22 +4,24 @@ import org.json.JSONObject;
 
 import ch.bnt.izicrawler.model.QuerySearchObj;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ResultBox {
 	
-	public ResultBox(String title) {
-		this.title = title;
+	public ResultBox(String searchKeyWord) {
+		this.searchKeyWord = searchKeyWord;
 	}
 
 	private JSONObject json;
 	private String jsonString;
 
-	private QuerySearchObj querySearch;
+	private QuerySearchObj querySearchObject;
 	
-	private String title;
+	private String searchKeyWord;
 
 	private String titleFormatted;
 
