@@ -34,6 +34,7 @@ public class Globals {
 	public static final String IMG_SIZE_120x90 = "_120x90";
 	
 	public static final String IMG_LOGO_EXT = "jpg";
+	public static final String IMG_BRAND_LOGO_EXT = "png";
 
 	public static final String GET_PUBLISHER = PROTOCOL +DOMAIN +MTG +"publisher/";
 	

@@ -3,6 +3,7 @@ package ch.bnt.izicrawler.model;
 import java.io.Serializable;
 import java.util.List;
 
+import ch.bnt.izicrawler.model.dec.City;
 import ch.bnt.izicrawler.model.dec.Contacts;
 import ch.bnt.izicrawler.model.dec.Content;
 import ch.bnt.izicrawler.model.dec.ContentProvider;
@@ -31,6 +32,8 @@ public class IziObject implements Serializable {
 	private String hash;
 
 	private int size;
+	
+	private City city;
 
 	private ContentProvider content_provider;
 	

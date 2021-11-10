@@ -1,5 +1,7 @@
 package ch.bnt.izicrawler.client.controller;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import ch.bnt.izicrawler.utils.Globals;
+import ch.bnt.izicrawler.utils.ManipulateJSON;
 
 @Controller
 public class ClientController {
@@ -60,10 +65,14 @@ public class ClientController {
 			@RequestParam(name="imageUuid") String imageUuid,
 			@RequestParam(name="type") String type,
 			@RequestParam(name="ext") String ext) {
-
-		String folderName = "temp";
 		
-		ep.getMedia(contentProviderUuid, imageUuid, type, ext, folderName);
+        String folderName = "temp";
+		
+		byte[] imageBytes = ep.getMedia(contentProviderUuid, imageUuid, ext);
+		
+		String jsonFileName = folderName +"_" +type +"." +ext;	
+		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +jsonFileName;
+		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, ext);
 		
 		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
 	}

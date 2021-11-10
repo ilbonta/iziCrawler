@@ -1,14 +1,10 @@
 package ch.bnt.izicrawler.client.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;
+import ch.bnt.izicrawler.model.form.Customer;
 import ch.bnt.izicrawler.utils.Globals;
 import ch.bnt.izicrawler.utils.ManipulateJSON;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +52,8 @@ public class EndpointCaller {
 
 		log.info("============= GET JSON: " +response.getBody().replace("\\", ""));
 		
-		rb.setJson(new JSONObject(body));
+		rb.getLanguageObjMap().put("en", body);
+//		rb.setJson(new JSONObject(body));
 		rb.setJsonString(body);
 		
 // Get Object
@@ -65,8 +63,38 @@ public class EndpointCaller {
 		rb.setQuerySearchObject(museum);
 		
 		// Info
+		String uuid = museum.getUuid();
+		rb.setUuid(uuid);
+//		String name = museum.getContent_provider().getName();
 		log.info("============= TITLE: {}", museum.getTitle());
+		
+		// Language
+		Set<String> langSet = museum.getLanguages().stream().collect(Collectors.toSet());
+		rb.setLanguageSet(langSet);
+		
 		log.info("============= LANGUAGES: {}", museum.getLanguages().toString());
+		Customer customer  = new Customer();
+		
+//		for (String lang : langSet) {	
+//			//https://api.izi.travel/mtgobjects/50b5f15b-7328-4509-8250-d36a523292b3?languages=en&includes=download,city&except=publisher,children'
+//			String urlLang = Globals.GET_OBJECT_ENDPOINT +rb.getUuid() +"?languages=" +lang +"&except=publisher,schedule,children";
+//			log.debug(urlLang);			
+//			IziObject[] izis = restTemplate.getForObject(urlLang, IziObject[].class);
+//
+//			IziObject izi = izis[0];
+//			
+//			// Info una tantum
+//			ManipulateJSON.infoDataRecovery(izi, customer);
+//			
+//			// Content
+//			if(izi.getContent()!=null) {
+//				Content contents = izi.getContent().get(0);			
+//				log.info("============= LANG TITLE (" +lang +"): -->" +contents.getTitle());			
+//				log.info("============= LANG SUMMARY (" +lang +"): -->" +contents.getSummary());
+//				log.info("============= LANG DESCR (" +lang +"): -->" +contents.getDesc());				
+//			}
+//			
+//		}
 		
 // Folder name		
 		// Format reference
@@ -77,23 +105,49 @@ public class EndpointCaller {
 		log.info("============= FOLDER NAME: {}", folderName);
 	
 // Serialize on FS
-		ManipulateJSON.persistIziObject(rb);
-		
-		// Info
-//		String uuid = museum.getUuid();
-//		String name = museum.getContent_provider().getName();
+		ManipulateJSON.manageFSFolder(rb);		
+//		ManipulateJSON.persistIziObjectJSON(rb);
+//		ManipulateJSON.persistIziObject(rb);
 
-// Get image
-		String contentProviderUuid = museum.getContent_provider().getUuid();
-		String imageLogoUuid = museum.getImages().get(0).getUuid();
-		String imageLogoType = museum.getImages().get(0).getType().trim().toLowerCase();
-
-		log.info("============= SAVE LOGO ");
-		getMedia(contentProviderUuid, imageLogoUuid, imageLogoType, Globals.IMG_LOGO_EXT, rb.getFolderName());
-		
-//		logo: https://media.izi.travel/8a6db7f5-da67-4652-9172-bbe4a96f47e8/b23985b4-9d0c-4637-953b-352ccc11738d_800x600.jpg);
+// Get logo image
+//		extractLogoImg(rb);
+// Get logo image
+		extractBrandLogoImg(rb);
 		
 		return rb.getJsonString();
+	}
+
+	private void extractLogoImg(ResultBox rb) {
+		QuerySearchObj qs = rb.getQuerySearchObject();
+		String contentProviderUuid = qs.getContent_provider().getUuid();
+		String imageLogoUuid = qs.getImages().get(0).getUuid();
+		String imageLogoType = qs.getImages().get(0).getType().trim().toLowerCase();
+
+		log.info("============= SAVE LOGO ");
+		byte[] imageBytes = getMedia(contentProviderUuid, imageLogoUuid, Globals.IMG_LOGO_EXT);
+		
+		String jsonFileName = rb.getFolderName() +"_" +imageLogoType +"." +Globals.IMG_LOGO_EXT;	
+		String filePath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +jsonFileName;
+		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_LOGO_EXT);
+	}
+	
+	private void extractBrandLogoImg(ResultBox rb) {
+		
+//		{MEDIA_BASE_URL}/{CONTENT_PROVIDER_UUID}/{IMAGE_UUID}.jpg
+		
+//		https://media.izi.travel/8a6db7f5-da67-4652-9172-bbe4a96f47e8/ebbd4c2a-f6b2-46b5-aaee-2347707152d8.jpg
+		
+//		QuerySearchObj qs = rb.getQuerySearchObject();
+//		String contentProviderUuid = qs.getContent_provider().getUuid();
+//		String imageLogoUuid = qs.getImages().get(0).getUuid();
+//		String imageLogoType = qs.getImages().get(0).getType().trim().toLowerCase();
+//		
+//		log.info("============= SAVE LOGO ");
+		byte[] imageBytes = getMediaBrand("8a6db7f5-da67-4652-9172-bbe4a96f47e8", "ebbd4c2a-f6b2-46b5-aaee-2347707152d8");		
+		
+		String jsonFileName = rb.getFolderName() +"_brand" +"." +Globals.IMG_BRAND_LOGO_EXT;	
+		String filePath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +jsonFileName;
+		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
 	}
 
 	private String extractFromArray(ResponseEntity<String> response) {
@@ -167,35 +221,45 @@ public class EndpointCaller {
 		
 	}
 	
-	public String getMedia(String contentProviderUuid, String imageUuid, String type, String ext, String folderName) {
+	public byte[] getMedia(String contentProviderUuid, String imageUuid, String ext) {
 
 //		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +ext;
 		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +Globals.IMG_SIZE_800x600 +"." +ext;
 		log.debug("============= IMG URL: {}", url);		
 
-		String jsonFileName = folderName +"_" +type +"." +ext;	
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;	
+//		String jsonFileName = folderName +"_" +type +"." +ext;	
+//		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;	
 		
 		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
 		
-		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
-	    try {
-	    	BufferedImage bImage2 = ImageIO.read(bis);
-			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName));
-			log.debug("============= IMG SAVED: {}", folderPath +File.separator +jsonFileName);
-		} catch (IOException e) {
-			log.error("IO error", e);
-		}
+//		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+//	    try {
+//	    	BufferedImage bImage2 = ImageIO.read(bis);
+//			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName));
+//			log.debug("============= IMG SAVED: {}", folderPath +File.separator +jsonFileName);
+//		} catch (IOException e) {
+//			log.error("IO error", e);
+//		}
 		
-		return "ok";		
+		return imageBytes;		
+	}
+	
+	public byte[] getMediaBrand(String contentProviderUuid, String imageUuid) {
+		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +"." +Globals.IMG_BRAND_LOGO_EXT;
+		log.debug("============= IMG URL: {}", url);
+		
+		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
+		
+		return imageBytes;		
 	}
 
 	public void getCityByUuid() {
 		
 //		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/7061495d-f2bf-43e2-9f3b-e232b2a921b9?languages=en", String.class);
-//		ManipulateJSON.printReadableJSON(response);		
+//		ManipulateJSON.printReadableJSON(response);
+		String url = "https://api.izi.travel/mtgobjects/ebbd4c2a-f6b2-46b5-aaee-2347707152d8?languages=en";
 		
-		IziObject[] izis = restTemplate.getForObject("https://api.izi.travel/mtgobjects/ebbd4c2a-f6b2-46b5-aaee-2347707152d8?languages=en", IziObject[].class);
+		IziObject[] izis = restTemplate.getForObject(url, IziObject[].class);
 
 		for (int i = 0; i < izis.length; i++) {
 			IziObject izi = izis[i];
