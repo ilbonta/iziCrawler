@@ -4,11 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
-import org.json.JSONObject;
-
-import ch.bnt.izicrawler.model.QuerySearchObj;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

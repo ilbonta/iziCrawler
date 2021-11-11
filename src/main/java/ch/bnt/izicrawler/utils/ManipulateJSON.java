@@ -9,8 +9,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ch.bnt.izicrawler.client.controller.ResultBox;
 import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;

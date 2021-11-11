@@ -21,7 +21,8 @@ public class Globals {
 	public static final String SEARCH_MUSEUM_ENDPOINT = PROTOCOL +DOMAIN +MTG +OBJECTS +SEARCH +"?languages=en&includes=translations&type=" +IziObjectType.MUSEUM.getParamGET() +"&query=";
 
 	public static final String GET_OBJECT_ENDPOINT = PROTOCOL +DOMAIN +MTGOBJECTS;
-	public static final String GET_OBJECT_ENDPOINT_GET_PARAM = "?languages=en&form=full";
+//	public static final String GET_OBJECT_ENDPOINT_GET_PARAM = "?languages=en&form=full";
+//	public static final String GET_CHILDREN_ENDPOINT_GET_PARAM = "children?languages=en&form=full";
 //	&except=children";
 
 //	{MEDIA_BASE_URL}/{CONTENT_PROVIDER_UUID}/{IMAGE_UUID}_{IMAGE_SIZE}.jpg

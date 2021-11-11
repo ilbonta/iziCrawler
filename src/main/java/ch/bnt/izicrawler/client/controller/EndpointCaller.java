@@ -1,23 +1,12 @@
 package ch.bnt.izicrawler.client.controller;
 
-import java.io.File;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;
-import ch.bnt.izicrawler.model.dec.Content;
-import ch.bnt.izicrawler.model.dec.Image;
-import ch.bnt.izicrawler.model.form.Customer;
 import ch.bnt.izicrawler.utils.Globals;
-import ch.bnt.izicrawler.utils.ManipulateJSON;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

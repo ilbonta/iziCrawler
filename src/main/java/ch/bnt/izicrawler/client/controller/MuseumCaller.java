@@ -72,14 +72,15 @@ public class MuseumCaller extends EndpointCaller {
 		boolean once = false;
 		for (String lang : langSet) {	
 			//https://api.izi.travel/mtgobjects/50b5f15b-7328-4509-8250-d36a523292b3?languages=en&includes=download,city&except=publisher,children'
-			String urlLang = Globals.GET_OBJECT_ENDPOINT +rb.getUuid() +"?languages=" +lang +"&except=publisher,schedule,children";
+//			String urlLang = Globals.GET_OBJECT_ENDPOINT +rb.getUuid() +"?languages=" +lang +"&except=publisher,schedule,children";
+			String urlLang = Globals.GET_OBJECT_ENDPOINT +rb.getUuid() +"?languages=" +lang +"&except=publisher,schedule";
 			log.debug(urlLang);			
 			IziObject[] izis = restTemplate.getForObject(urlLang, IziObject[].class);
 
 			IziObject izi = izis[0];
 			
 			// Info una tantum
-			ManipulateJSON.infoDataRecovery(izi, customer);
+//			ManipulateJSON.infoDataRecovery(izi, customer);
 
 			if(!once) {
 				extractLangImage(rb, izi);
@@ -87,24 +88,24 @@ public class MuseumCaller extends EndpointCaller {
 			}
 			
 			// Lang Content
-			ManipulateJSON.infoLangDataRecovery(izi, customer, lang);
+//			ManipulateJSON.infoLangDataRecovery(izi, customer, lang);
 
 			String jsonFileName = rb.getFolderName() +"_obj_" +lang +".json";
 			ManipulateJSON.persistIziObjectJSON(rb, new JSONObject(izi).toString(), jsonFileName);			
 		}	
 
 		String jsonFileName = rb.getFolderName() +"_search.json";
-		ManipulateJSON.persistIziObjectJSON(rb, rb.getJsonString(), jsonFileName);
-		ManipulateJSON.persistIziObject(rb, museum);
+//		ManipulateJSON.persistIziObjectJSON(rb, rb.getJsonString(), jsonFileName);
+//		ManipulateJSON.persistIziObject(rb, museum);
 
 		String contentProviderUuid = museum.getContent_provider().getUuid();
 		
 // Get logo image
 		Image image = museum.getImages().get(0);
-		extractLogoImg(rb, image, contentProviderUuid);
+//		extractLogoImg(rb, image, contentProviderUuid);
 // Get logo image
 		Image image2 = museum.getImages().get(0);
-		extractBrandLogoImg(rb, image2, contentProviderUuid);
+//		extractBrandLogoImg(rb, image2, contentProviderUuid);
 		
 		return rb.getJsonString();
 	}
