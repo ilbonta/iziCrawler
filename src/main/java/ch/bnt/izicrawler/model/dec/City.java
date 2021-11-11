@@ -1,12 +1,17 @@
 package ch.bnt.izicrawler.model.dec;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class City {
+@NoArgsConstructor
+public class City implements Serializable {
 	
+	private static final long serialVersionUID = 3334291728989110021L;
+
 	private String uuid;
     
 	private String type;

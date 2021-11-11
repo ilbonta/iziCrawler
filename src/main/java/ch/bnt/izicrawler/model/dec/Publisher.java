@@ -6,9 +6,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@NoArgsConstructor
 public class Publisher implements Serializable {
 
 	private static final long serialVersionUID = 2066275565330515232L;
@@ -32,4 +34,5 @@ public class Publisher implements Serializable {
     private List<Image> images;
     
     private ContentProvider content_provider;
+    
 }

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data 
+@Data
+@NoArgsConstructor
 public class Content implements Serializable {
 	
 	private static final long serialVersionUID = 6225976827141178832L;
@@ -25,4 +27,5 @@ public class Content implements Serializable {
     private String title;
     
     private List<Child> children;
+    
 }
