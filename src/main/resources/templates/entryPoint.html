@@ -26,9 +26,21 @@
 		<div class="row">
 			<div class="col">
 				<form action="/uuidMin" method="get">
-					<b>By UUid minimal:</b><br /> <label>Uuid:</label> <input
-						type="text" name="uuid" value="" style="width: 500px"> <input
-						type="submit" value="Submit">
+					<b>By UUid minimal:</b><br />
+					
+					<label>Uuid:</label>
+					<input type="text" name="uuid" value="" style="width: 500px">
+					
+					<label>lang:</label>
+					<select name="lang" id="lang">
+					  <option value="en" selected="selected">English</option>
+					  <option value="it">Italiano</option>
+					  <option value="fr">Français</option>
+					  <option value="de">Deutsch</option>
+					  <option value="es">Español</option>
+					</select>
+					
+					<input type="submit" value="Submit">
 				</form>
 			</div>
 		</div>

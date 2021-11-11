@@ -39,10 +39,10 @@ public class ClientController {
 	}
 		
 	@GetMapping("/uuidMin")
-	public ModelAndView getByUuidMinimal(@RequestParam(name="uuid") String uuid) {
+	public ModelAndView getByUuidMinimal(@RequestParam(name="uuid") String uuid, @RequestParam(name="lang") String lang) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = endpointCaller.getByUuidMinimal(uuid);
+		String json = endpointCaller.getByUuidMinimal(uuid, lang);
 		
 		mav.addObject("json", json);	
 		

@@ -1,10 +1,13 @@
 package ch.bnt.izicrawler.client.controller;
 
+import java.lang.reflect.Array;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;
 import ch.bnt.izicrawler.utils.Globals;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +39,7 @@ public class EndpointCaller {
 		ResultBox rb =  new ResultBox();
 		
 		ResponseEntity<String> response = restTemplate.getForEntity(Globals.GET_PUBLISHER +uuid +"?languages=nl,en&except=children", String.class);
-		System.out.println("============= " +response.getBody());
+		log.debug("============= " +response.getBody());
 				
 		String body = extractFromArray(response);
 
@@ -46,12 +49,19 @@ public class EndpointCaller {
 		
 	}
 	
-	public String getByUuidMinimal(String uuid) {
+	public IziObject getIziObjectByUuid(String uuid, String lang) {
+		
+		IziObject[] izi = restTemplate.getForObject("https://api.izi.travel/mtgobjects/" +uuid +"?languages=" +lang, IziObject[].class);
+		
+		return izi[0];
+	}
+
+	public String getByUuidMinimal(String uuid, String lang) {
 		
 		ResultBox rb =  new ResultBox();
 		
-		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/" +uuid +"?languages=en", String.class);
-		System.out.println("============= " +response.getBody());
+		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/" +uuid +"?languages=" +lang, String.class);
+		log.debug("============= " +response.getBody());
 		
 		String body = extractFromArray(response);
 		
@@ -76,7 +86,7 @@ public class EndpointCaller {
 		ResultBox rb =  new ResultBox();
 		
 		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/" +uuid +"?languages=en&includes=all,city,country&except=translations,download", String.class);
-		System.out.println("============= " +response.getBody());
+		log.debug("============= " +response.getBody());
 
 		String body = extractFromArray(response);
 
