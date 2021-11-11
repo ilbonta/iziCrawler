@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,7 +98,7 @@ public class MuseumCaller extends EndpointCaller {
 //			ManipulateJSON.persistIziObjectJSON(rb, new JSONObject(izi).toString(), jsonFileName);
 			
 			// Permanente
-			organizeChildren(rb, izi, lang);
+//			organizeChildren(rb, izi, lang);
 		}	
 
 		String jsonFileName = rb.getFolderName() +"_search.json";
@@ -109,7 +110,7 @@ public class MuseumCaller extends EndpointCaller {
 		Image image = museum.getImages().get(0);
 //		extractLogoImg(rb, image, contentProviderUuid);
 // Get logo image
-		Image image2 = museum.getImages().get(0);
+		Image image2 = museum.getPublisher().getImages().get(0);
 //		extractBrandLogoImg(rb, image2, contentProviderUuid);
 		
 		return rb.getJsonString();
@@ -118,8 +119,9 @@ public class MuseumCaller extends EndpointCaller {
 	private void organizeChildren(ResultBox rb, IziObject izi, String lang) {
 		if(izi.getContent()!=null && izi.getContent().size() >0) {
 			Content content = izi.getContent().get(0);			
-			if(content.getChildren()!=null && content.getChildren().size()>0) {				
-				for(Child child : content.getChildren()) {
+			if(content.getChildren()!=null && content.getChildren().size()>0) {
+				Integer i = 0;
+				for(Child child : content.getChildren()) {					
 					if("published".equals(child.getStatus())) {
 						// get exhib id
 						String exhibUuid = child.getUuid();
@@ -127,6 +129,7 @@ public class MuseumCaller extends EndpointCaller {
 												
 						// get audio 
 						IziObject izi2 = getIziObjectByUuid(exhibUuid, lang);
+//						ManipulateJSON.persistExhibPermanentIziObject(rb, new JSONObject(izi2).toString(), "exhib_permanent_" +i +"_" +child.getTitle() +".json");
 						Content content2 = izi.getContent().get(0);	
 
 						// Title
@@ -141,6 +144,7 @@ public class MuseumCaller extends EndpointCaller {
 						Audio audio = content2.getAudio().get(0);
 						String audioUuid = audio.getUuid();
 					}
+					i = i+1;
 				}				
 			}			
 		}		
@@ -193,7 +197,7 @@ public class MuseumCaller extends EndpointCaller {
 	private void extractBrandLogoImg(ResultBox rb, Image image, String contentProviderUuid) {
 		String imageBrandUuid = image.getUuid();
 		
-		log.debug("============= SAVE BRAND IAMGE ");
+		log.debug("============= SAVE BRAND IMAGE ");
 		byte[] imageBytes = getMediaBrand(contentProviderUuid, imageBrandUuid);		
 		
 		String jsonFileName = rb.getFolderName() +"_brand" +"." +Globals.IMG_BRAND_LOGO_EXT;	

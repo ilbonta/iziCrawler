@@ -53,6 +53,12 @@ public class ManipulateJSON {
 		log.debug("============= SUBSUBFOLDER CREATED: {}", rb.getFolderPath_EXHIB_PERMANENT());	
 	}
 	
+	public static void persistExhibPermanentIziObject(ResultBox rb, String json, String jsonFileName) {
+		// Serialize JSON
+		serializeToFileInFolder(json, rb.getFolderPath_EXHIB_PERMANENT() +File.separator +jsonFileName);
+		log.debug("============= JSON SERIALIZED: {}", jsonFileName);
+	}
+
 	public static void persistIziObjectJSON(ResultBox rb, String json, String jsonFileName) {
 		// Serialize JSON
 		serializeToFileInFolder(json, rb.getFolderPath_JSON() +File.separator +jsonFileName);
