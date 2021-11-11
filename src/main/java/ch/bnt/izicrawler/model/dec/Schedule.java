@@ -10,9 +10,9 @@ public class Schedule implements Serializable {
 
 	private static final long serialVersionUID = 7882022382297816961L;
 
-		private Object mon;
+		private List<String> mon;
 	    
-	    private Object tue;
+	    private List<String> tue;
 	    
 	    private List<String> wed;
 	    

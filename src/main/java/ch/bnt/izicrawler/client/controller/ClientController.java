@@ -71,7 +71,7 @@ public class ClientController {
 		byte[] imageBytes = ep.getMedia(contentProviderUuid, imageUuid, ext);
 		
 		String jsonFileName = folderName +"_" +type +"." +ext;	
-		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +jsonFileName;
+		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +"img" +File.separator +jsonFileName;
 		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, ext);
 		
 		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);

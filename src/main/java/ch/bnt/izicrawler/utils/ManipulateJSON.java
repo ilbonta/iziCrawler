@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import ch.bnt.izicrawler.client.controller.ResultBox;
 import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;
+import ch.bnt.izicrawler.model.dec.Content;
 import ch.bnt.izicrawler.model.form.Customer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,23 +26,25 @@ public class ManipulateJSON {
 		// Generate Folder
 		new File(folderPath).mkdirs();
 		log.debug("============= DIR CREATED: {}", folderPath);
+
+		new File(folderPath +File.separator +"img").mkdirs();
+		new File(folderPath +File.separator +"json").mkdirs();		
 	}
 	
-	public static void persistIziObjectJSON(ResultBox rb) {
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName();
+	public static void persistIziObjectJSON(ResultBox rb, String json, String jsonFileName) {
+		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +"json";
 		
 		// Serialize JSON
-		String jsonFileName = rb.getFolderName() +".json";
-		serializeToFileInFolder(rb.getJsonString(), folderPath +File.separator +jsonFileName);
+		serializeToFileInFolder(json, folderPath +File.separator +jsonFileName);
 		log.debug("============= JSON SERIALIZED: {}", jsonFileName);
 	}
 	
-	public static void persistIziObject(ResultBox rb) {
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName();
+	public static void persistIziObject(ResultBox rb, QuerySearchObj museum) {
+		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +"json";
 		
 		// Serialize object
 		String objFileName = rb.getFolderName() +".smrt";		
-		serializeToFileInFolder(rb.getQuerySearchObject(), folderPath +File.separator +objFileName);
+		serializeToFileInFolder(museum, folderPath +File.separator +objFileName);
 		log.debug("============= OBJ SERIALIZED: {}", objFileName);
 	}	
 
@@ -80,6 +83,11 @@ public class ManipulateJSON {
 	}
 
 	public static void infoDataRecovery(IziObject izi, Customer customer) {
+		
+		if(customer.getSchedule() == null) {
+			customer.setSchedule(izi.getSchedule());
+			log.info("============= SCHEDULE: -->" +customer.getSchedule());
+		}
 		
 		if(customer.getAddress()==null || "".equals(customer.getAddress())) {
 			customer.setAddress(izi.getContacts().getAddress().trim());
@@ -130,6 +138,20 @@ public class ManipulateJSON {
 //			log.info("============= ALTITUDE: {}", customer.getAltitude());
 //		}
 		
+	}
+
+	public static void infoLangDataRecovery(IziObject izi, Customer customer, String lang) {
+		if(izi.getContent()!=null && izi.getContent().size() >0) {
+			Content contents = izi.getContent().get(0);
+			customer.getTitles().put(lang, contents.getTitle());
+			log.info("============= LANG TITLE (" +lang +"): -->" +contents.getTitle());
+			
+			customer.getTitles().put(lang, contents.getSummary());				
+			log.info("============= LANG SUMMARY (" +lang +"): -->" +contents.getSummary());
+			
+			customer.getTitles().put(lang, contents.getDesc());
+			log.info("============= LANG DESCR (" +lang +"): -->" +contents.getDesc());				
+		}		
 	}
 	
 //	public void deserializeFromFile(String fileName) {

@@ -38,7 +38,6 @@ public class ResultBox {
 //	private JSONObject json;
 	private String jsonString;
 
-	private QuerySearchObj querySearchObject;
 	
 	private String searchKeyWord;
 
