@@ -17,7 +17,8 @@ import ch.bnt.izicrawler.utils.ManipulateJSON;
 @Controller
 public class ClientController {
 
-	@Autowired private EndpointCaller ep;
+	@Autowired private EndpointCaller endpointCaller;
+	@Autowired private MuseumCaller museumCaller;
 
 	@GetMapping("/")
 	public String greeting(Model model) {
@@ -30,7 +31,7 @@ public class ClientController {
 	public ModelAndView getMuseum(@RequestParam(name="searchKeyWord") String searchKeyWord) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = ep.searchForMuseum(searchKeyWord);
+		String json = museumCaller.searchForMuseum(searchKeyWord);
 		
 		mav.addObject("json", json);	
 		
@@ -41,7 +42,7 @@ public class ClientController {
 	public ModelAndView getByUuidMinimal(@RequestParam(name="uuid") String uuid) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = ep.getByUuidMinimal(uuid);
+		String json = endpointCaller.getByUuidMinimal(uuid);
 		
 		mav.addObject("json", json);	
 		
@@ -52,7 +53,7 @@ public class ClientController {
 	public ModelAndView getByUuidAll(@RequestParam(name="uuid") String uuid) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = ep.getByUuidAll(uuid);
+		String json = endpointCaller.getByUuidAll(uuid);
 		
 		mav.addObject("json", json);	
 		
@@ -68,7 +69,7 @@ public class ClientController {
 		
         String folderName = "temp";
 		
-		byte[] imageBytes = ep.getMedia(contentProviderUuid, imageUuid, ext);
+		byte[] imageBytes = endpointCaller.getMedia(contentProviderUuid, imageUuid, ext);
 		
 		String jsonFileName = folderName +"_" +type +"." +ext;	
 		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +"img" +File.separator +jsonFileName;
@@ -81,7 +82,7 @@ public class ClientController {
 	public ModelAndView getPublisherByUuid(@RequestParam(name="uuid") String uuid) {
 		ModelAndView mav =  new ModelAndView("result");
 		
-		String json = ep.getPublisherByUuid(uuid);
+		String json = endpointCaller.getPublisherByUuid(uuid);
 		
 		mav.addObject("json", json);	
 		

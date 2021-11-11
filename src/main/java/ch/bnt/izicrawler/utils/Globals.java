@@ -15,7 +15,6 @@ public class Globals {
 	public static final String MTGOBJECTS = "mtgobjects/";
 
 	public static final String SEARCH = "search";
-	
 
 	// ENDPOINT
 	public static final String SEARCH_CITY_ENDPOINT = PROTOCOL +DOMAIN +MTG +OBJECTS +SEARCH +"?languages=en&includes=translations&type=" +IziObjectType.MUSEUM.getParamGET() +"&query=";
