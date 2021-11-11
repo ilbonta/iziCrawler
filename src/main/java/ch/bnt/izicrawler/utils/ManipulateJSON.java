@@ -19,30 +19,50 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManipulateJSON {
 	
+	/**
+	 * |_<main_output_folder>
+	 * 		|_<foldername>
+	 * 			|_img
+	 * 			|_json
+	 * 			|_exhib
+	 * 				|_permanent
+	 * 
+	 * @param rb
+	 */
 	public static void manageFSFolder(ResultBox rb) {
 		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName();
+		
 		// Generate Folder
 		new File(folderPath).mkdirs();
-		log.debug("============= DIR CREATED: {}", folderPath);
+		log.debug("============= FOLDER CREATED: {}", folderPath);
 
-		new File(folderPath +File.separator +"img").mkdirs();
-		new File(folderPath +File.separator +"json").mkdirs();		
+		rb.setFolderPath_IMG(folderPath +File.separator +"img");
+		new File(rb.getFolderPath_IMG()).mkdirs();
+		log.debug("============= SUBFOLDER CREATED: {}", rb.getFolderPath_IMG());
+		
+		rb.setFolderPath_JSON(folderPath +File.separator +"json");
+		new File(rb.getFolderPath_JSON()).mkdirs();
+		log.debug("============= SUBFOLDER CREATED: {}", rb.getFolderPath_JSON());
+		
+		rb.setFolderPath_EXHIB(folderPath +File.separator +"exhib");
+		new File(rb.getFolderPath_EXHIB()).mkdirs();
+		log.debug("============= SUBFOLDER CREATED: {}", rb.getFolderPath_EXHIB());
+
+		rb.setFolderPath_EXHIB_PERMANENT(folderPath +File.separator +"exhib" +File.separator +"permanent");	
+		new File(rb.getFolderPath_EXHIB_PERMANENT()).mkdirs();
+		log.debug("============= SUBSUBFOLDER CREATED: {}", rb.getFolderPath_EXHIB_PERMANENT());	
 	}
 	
 	public static void persistIziObjectJSON(ResultBox rb, String json, String jsonFileName) {
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +"json";
-		
 		// Serialize JSON
-		serializeToFileInFolder(json, folderPath +File.separator +jsonFileName);
+		serializeToFileInFolder(json, rb.getFolderPath_JSON() +File.separator +jsonFileName);
 		log.debug("============= JSON SERIALIZED: {}", jsonFileName);
 	}
 	
 	public static void persistIziObject(ResultBox rb, QuerySearchObj museum) {
-		String folderPath = Globals.MAIN_OUTPUT_FOLDER +rb.getFolderName() +File.separator +"json";
-		
 		// Serialize object
 		String objFileName = rb.getFolderName() +".smrt";		
-		serializeToFileInFolder(museum, folderPath +File.separator +objFileName);
+		serializeToFileInFolder(museum, rb.getFolderPath_JSON() +File.separator +objFileName);
 		log.debug("============= OBJ SERIALIZED: {}", objFileName);
 	}	
 

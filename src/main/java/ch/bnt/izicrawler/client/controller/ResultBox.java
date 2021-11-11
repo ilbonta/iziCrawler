@@ -1,5 +1,6 @@
 package ch.bnt.izicrawler.client.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,9 +27,13 @@ public class ResultBox {
 	private String titleFormatted;
 
 	private Set<String> languageSet;	
-	private Map<String, String> LanguageObjMap = new HashMap<>();		
+	private Map<String, String> LanguageObjMap = new HashMap<>();
 	
 	private String folderName;
+	private String folderPath_IMG;
+	private String folderPath_JSON;
+	private String folderPath_EXHIB;
+	private String folderPath_EXHIB_PERMANENT;
 
 //	private JSONObject json;
 	private String jsonString;
