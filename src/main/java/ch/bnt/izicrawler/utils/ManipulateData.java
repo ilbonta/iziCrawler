@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
+
 import ch.bnt.izicrawler.client.controller.ResultBox;
 import ch.bnt.izicrawler.model.IziObject;
 import ch.bnt.izicrawler.model.QuerySearchObj;
@@ -17,7 +19,7 @@ import ch.bnt.izicrawler.model.form.Customer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ManipulateJSON {
+public class ManipulateData {
 	
 	/**
 	 * |_<main_output_folder>
@@ -73,10 +75,21 @@ public class ManipulateJSON {
 	}	
 
 	public static void persistIziObjectMedia(byte[] imageBytes, String filePath, String ext) {
+		log.debug("============= Try to save: {}", filePath);
 		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
 	    try {
 	    	BufferedImage bImage2 = ImageIO.read(bis);
 			ImageIO.write(bImage2, ext, new File(filePath));
+			log.debug("============= MEDIA SAVED: {}", filePath);
+		} catch (IOException e) {
+			log.error("IO error", e);
+		}	
+	}
+	
+	public static void persistIziObjectAudio(byte[] audioBytes, String filePath, String ext) {
+		log.debug("============= Try to save: {}", filePath);
+		try {
+			FileUtils.writeByteArrayToFile(new File(filePath), audioBytes);
 			log.debug("============= MEDIA SAVED: {}", filePath);
 		} catch (IOException e) {
 			log.error("IO error", e);

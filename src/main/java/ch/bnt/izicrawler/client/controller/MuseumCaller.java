@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,7 @@ import ch.bnt.izicrawler.model.dec.Content;
 import ch.bnt.izicrawler.model.dec.Image;
 import ch.bnt.izicrawler.model.form.Customer;
 import ch.bnt.izicrawler.utils.Globals;
-import ch.bnt.izicrawler.utils.ManipulateJSON;
+import ch.bnt.izicrawler.utils.ManipulateData;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -70,7 +69,7 @@ public class MuseumCaller extends EndpointCaller {
 		log.info("============= FOLDER NAME: {}", folderName);
 		
 		// Serialize on FS
-		ManipulateJSON.manageFSFolder(rb);
+		ManipulateData.manageFSFolder(rb);
 		
 		boolean once = false;
 		for (String lang : langSet) {
@@ -87,7 +86,7 @@ public class MuseumCaller extends EndpointCaller {
 //			ManipulateJSON.infoDataRecovery(izi, customer);
 
 			if(!once) {
-				extractLangImage(rb, izi);
+//				extractLangImage(rb, izi);
 				once = true;
 			}
 			
@@ -98,7 +97,7 @@ public class MuseumCaller extends EndpointCaller {
 //			ManipulateJSON.persistIziObjectJSON(rb, new JSONObject(izi).toString(), jsonFileName);
 			
 			// Permanente
-//			organizeChildren(rb, izi, lang);
+			organizeChildren(rb, izi, lang);
 		}	
 
 		String jsonFileName = rb.getFolderName() +"_search.json";
@@ -108,10 +107,10 @@ public class MuseumCaller extends EndpointCaller {
 		String contentProviderUuid = museum.getContent_provider().getUuid();
 // Get logo image
 		Image image = museum.getImages().get(0);
-		extractLogoImg(rb, image, contentProviderUuid);
+//		extractLogoImg(rb, image, contentProviderUuid);
 // Get logo image
 		Image image2 = museum.getPublisher().getImages().get(0);
-		extractBrandLogoImg(rb, image2, contentProviderUuid);
+//		extractBrandLogoImg(rb, image2, contentProviderUuid);
 		
 		return rb.getJsonString();
 	}
@@ -142,13 +141,13 @@ public class MuseumCaller extends EndpointCaller {
 							log.debug("============= LANG DESCR (" +lang +"): -->" +child.getDesc());
 							
 							// Audio
-//							Audio audio = content2.getAudio().get(0);
-//							String audioUuid = audio.getUuid();
-//							String contentProviderUuid = izi.getContent_provider().getUuid();
-//							byte[] imageBytes = getMedia(contentProviderUuid, audioUuid, Globals.AUDIO_EXT);
-//							
-//							String mediaFile = rb.getFolderPath_EXHIB_PERMANENT() +File.separator +i +"_" +child.getTitle() +"." +Globals.AUDIO_EXT;
-//							ManipulateJSON.persistIziObjectMedia(imageBytes, mediaFile, Globals.AUDIO_EXT);							
+							Audio audio = content2.getAudio().get(0);
+							String audioUuid = audio.getUuid();
+							String contentProviderUuid = izi.getContent_provider().getUuid();
+							byte[] imageBytes = getMedia(contentProviderUuid, audioUuid, Globals.AUDIO_EXT);
+							
+							String mediaFile = rb.getFolderPath_EXHIB_PERMANENT() +File.separator +i +"_" +child.getTitle() +"." +Globals.AUDIO_EXT;
+							ManipulateData.persistIziObjectAudio(imageBytes, mediaFile, Globals.AUDIO_EXT);							
 						}
 					}
 					i = i+1;
@@ -174,7 +173,7 @@ public class MuseumCaller extends EndpointCaller {
 						
 						String jsonFileName = rb.getFolderName() +"_" +imageLogoType +"_" +image.getOrder() +"." +Globals.IMG_LOGO_EXT;	
 						String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-						ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);					
+						ManipulateData.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);					
 					}
 					else if("map".equals(image.getType())) {
 						log.debug("============= SAVE MAP IMAGE ");
@@ -182,7 +181,7 @@ public class MuseumCaller extends EndpointCaller {
 						
 						String jsonFileName = rb.getFolderName() +"_map_" +image.getOrder()+"." +Globals.IMG_BRAND_LOGO_EXT;	
 						String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-						ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
+						ManipulateData.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
 					}
 				}
 			}
@@ -198,7 +197,7 @@ public class MuseumCaller extends EndpointCaller {
 		
 		String jsonFileName = rb.getFolderName() +"_" +imageLogoType +"." +Globals.IMG_LOGO_EXT;
 		String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);
+		ManipulateData.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);
 	}
 	
 	private void extractBrandLogoImg(ResultBox rb, Image image, String contentProviderUuid) {
@@ -209,7 +208,7 @@ public class MuseumCaller extends EndpointCaller {
 		
 		String jsonFileName = rb.getFolderName() +"_brand" +"." +Globals.IMG_BRAND_LOGO_EXT;	
 		String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
+		ManipulateData.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
 	}
 	
 //	public String getPublisherByUuid(String uuid) {
