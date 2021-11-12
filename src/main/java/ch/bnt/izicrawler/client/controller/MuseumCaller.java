@@ -108,10 +108,10 @@ public class MuseumCaller extends EndpointCaller {
 		String contentProviderUuid = museum.getContent_provider().getUuid();
 // Get logo image
 		Image image = museum.getImages().get(0);
-//		extractLogoImg(rb, image, contentProviderUuid);
+		extractLogoImg(rb, image, contentProviderUuid);
 // Get logo image
 		Image image2 = museum.getPublisher().getImages().get(0);
-//		extractBrandLogoImg(rb, image2, contentProviderUuid);
+		extractBrandLogoImg(rb, image2, contentProviderUuid);
 		
 		return rb.getJsonString();
 	}
@@ -121,28 +121,35 @@ public class MuseumCaller extends EndpointCaller {
 			Content content = izi.getContent().get(0);			
 			if(content.getChildren()!=null && content.getChildren().size()>0) {
 				Integer i = 0;
-				for(Child child : content.getChildren()) {					
+				for(Child child : content.getChildren()) {
 					if("published".equals(child.getStatus())) {
-						// get exhib id
-						String exhibUuid = child.getUuid();
-						log.debug("============= MEDIA UUID (" +lang +"): -->" +exhibUuid);
-												
-						// get audio 
-						IziObject izi2 = getIziObjectByUuid(exhibUuid, lang);
-//						ManipulateJSON.persistExhibPermanentIziObject(rb, new JSONObject(izi2).toString(), "exhib_permanent_" +i +"_" +child.getTitle() +".json");
-						Content content2 = izi.getContent().get(0);	
-
-						// Title
-						content2.getTitle();
-						log.info("============= LANG TITLE (" +lang +"): -->" +child.getTitle());
-						
-						// Description
-						content2.getDesc();
-						log.debug("============= LANG DESCR (" +lang +"): -->" +child.getDesc());
-						
-						// Audio
-						Audio audio = content2.getAudio().get(0);
-						String audioUuid = audio.getUuid();
+						if("en".equals(child.getLanguage())) {
+							// get exhib id
+							String exhibUuid = child.getUuid();
+							log.debug("============= MEDIA UUID (" +lang +"): -->" +exhibUuid);
+													
+							// get audio 
+							IziObject izi2 = getIziObjectByUuid(exhibUuid, lang);
+//							ManipulateJSON.persistExhibPermanentIziObject(rb, new JSONObject(izi2).toString(), "exhib_permanent_" +i +"_" +child.getTitle() +".json");
+							Content content2 = izi.getContent().get(0);	
+	
+							// Title
+							content2.getTitle();
+							log.info("============= LANG TITLE (" +lang +"): -->" +child.getTitle());
+							
+							// Description
+							content2.getDesc();
+							log.debug("============= LANG DESCR (" +lang +"): -->" +child.getDesc());
+							
+							// Audio
+//							Audio audio = content2.getAudio().get(0);
+//							String audioUuid = audio.getUuid();
+//							String contentProviderUuid = izi.getContent_provider().getUuid();
+//							byte[] imageBytes = getMedia(contentProviderUuid, audioUuid, Globals.AUDIO_EXT);
+//							
+//							String mediaFile = rb.getFolderPath_EXHIB_PERMANENT() +File.separator +i +"_" +child.getTitle() +"." +Globals.AUDIO_EXT;
+//							ManipulateJSON.persistIziObjectMedia(imageBytes, mediaFile, Globals.AUDIO_EXT);							
+						}
 					}
 					i = i+1;
 				}				
@@ -163,19 +170,19 @@ public class MuseumCaller extends EndpointCaller {
 						String imageLogoType = image.getType().trim().toLowerCase();
 	
 						log.debug("============= SAVE STORY IMAGE ");
-						byte[] imageBytes = getMedia(contentProviderUuid, imageLogoUuid, Globals.IMG_LOGO_EXT);
+						byte[] imageBytes = getImage(contentProviderUuid, imageLogoUuid, Globals.IMG_SIZE_800x600, Globals.IMG_LOGO_EXT);
 						
 						String jsonFileName = rb.getFolderName() +"_" +imageLogoType +"_" +image.getOrder() +"." +Globals.IMG_LOGO_EXT;	
 						String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-						ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_LOGO_EXT);					
+						ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);					
 					}
 					else if("map".equals(image.getType())) {
 						log.debug("============= SAVE MAP IMAGE ");
-						byte[] imageBytes = getMapImage(contentProviderUuid, imageLogoUuid);		
+						byte[] imageBytes = getMedia(contentProviderUuid, imageLogoUuid, Globals.IMG_LOGO_EXT);		
 						
 						String jsonFileName = rb.getFolderName() +"_map_" +image.getOrder()+"." +Globals.IMG_BRAND_LOGO_EXT;	
 						String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-						ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
+						ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
 					}
 				}
 			}
@@ -187,22 +194,22 @@ public class MuseumCaller extends EndpointCaller {
 		String imageLogoType = image.getType().trim().toLowerCase();
 
 		log.debug("============= SAVE LOGO IMAGE");
-		byte[] imageBytes = getMedia(contentProviderUuid, imageLogoUuid, Globals.IMG_LOGO_EXT);
+		byte[] imageBytes = getImage(contentProviderUuid, imageLogoUuid, Globals.IMG_SIZE_800x600, Globals.IMG_LOGO_EXT);
 		
 		String jsonFileName = rb.getFolderName() +"_" +imageLogoType +"." +Globals.IMG_LOGO_EXT;
 		String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_LOGO_EXT);
+		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_LOGO_EXT);
 	}
 	
 	private void extractBrandLogoImg(ResultBox rb, Image image, String contentProviderUuid) {
 		String imageBrandUuid = image.getUuid();
 		
 		log.debug("============= SAVE BRAND IMAGE ");
-		byte[] imageBytes = getMediaBrand(contentProviderUuid, imageBrandUuid);		
+		byte[] imageBytes = getMedia(contentProviderUuid, imageBrandUuid, Globals.IMG_BRAND_LOGO_EXT);		
 		
 		String jsonFileName = rb.getFolderName() +"_brand" +"." +Globals.IMG_BRAND_LOGO_EXT;	
 		String filePath = rb.getFolderPath_IMG() +File.separator +jsonFileName;
-		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
+		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, Globals.IMG_BRAND_LOGO_EXT);
 	}
 	
 //	public String getPublisherByUuid(String uuid) {
@@ -250,23 +257,23 @@ public class MuseumCaller extends EndpointCaller {
 //		
 //	}
 	
-	public byte[] getMapImage(String contentProviderUuid, String imageUuid) {
-		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +"." +Globals.IMG_LOGO_EXT;
-		log.debug("============= IMG URL: {}", url);
+	public byte[] getMedia(String contentProviderUuid, String mediaUuid, String ext) {
+		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +mediaUuid +"." +ext;
+		log.debug("============= MEDIA URL: {}", url);
 		
 		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
 		
 		return imageBytes;		
 	}
 	
-	public byte[] getMediaBrand(String contentProviderUuid, String imageUuid) {
-		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +"." +Globals.IMG_BRAND_LOGO_EXT;
-		log.debug("============= IMG URL: {}", url);
-		
-		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
-		
-		return imageBytes;		
-	}
+	public byte[] getImage(String contentProviderUuid, String mediaUuid, String size, String ext) {
+        String url = Globals.GET_MEDIA +contentProviderUuid +"/" +mediaUuid +size +"." +ext;
+        log.debug("============= IMG URL: {}", url); 
+        
+        byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
+        
+        return imageBytes;        
+    }
 
 	public void getCityByUuid() {
 		

@@ -94,47 +94,29 @@ public class EndpointCaller {
 		
 	}
 	
-	protected byte[] getMedia(String contentProviderUuid, String imageUuid, String ext) {
-
-//		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +ext;
-		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +Globals.IMG_SIZE_800x600 +"." +ext;
-		log.debug("============= IMG URL: {}", url);		
-
-//		String jsonFileName = folderName +"_" +type +"." +ext;	
-//		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;	
-		
-		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
-		
-//		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
-//	    try {
-//	    	BufferedImage bImage2 = ImageIO.read(bis);
-//			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName));
-//			log.debug("============= IMG SAVED: {}", folderPath +File.separator +jsonFileName);
-//		} catch (IOException e) {
-//			log.error("IO error", e);
-//		}
-		
-		return imageBytes;		
-	}
-	
-//	public byte[] getMapImage(String contentProviderUuid, String imageUuid) {
-//		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +"." +Globals.IMG_LOGO_EXT;
-//		log.debug("============= IMG URL: {}", url);
-//		
-//		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
-//		
-//		return imageBytes;		
-//	}
-//	
-//	public byte[] getMediaBrand(String contentProviderUuid, String imageUuid) {
-//		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +imageUuid +"." +Globals.IMG_BRAND_LOGO_EXT;
-//		log.debug("============= IMG URL: {}", url);
-//		
-//		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
-//		
-//		return imageBytes;		
-//	}
+//	protected byte[] getMedia(String contentProviderUuid, String mediaUuid, String ext) {
 //
+////		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +mediaUuid +ext;
+//		String url = Globals.GET_MEDIA +contentProviderUuid +"/" +mediaUuid +Globals.IMG_SIZE_800x600 +"." +ext;
+//		log.debug("============= IMG URL: {}", url);		
+//
+////		String jsonFileName = folderName +"_" +type +"." +ext;	
+////		String folderPath = Globals.MAIN_OUTPUT_FOLDER +folderName;	
+//		
+//		byte[] imageBytes = restTemplate.getForObject(url, byte[].class);
+//		
+////		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+////	    try {
+////	    	BufferedImage bImage2 = ImageIO.read(bis);
+////			ImageIO.write(bImage2, ext, new File(folderPath +File.separator +jsonFileName));
+////			log.debug("============= IMG SAVED: {}", folderPath +File.separator +jsonFileName);
+////		} catch (IOException e) {
+////			log.error("IO error", e);
+////		}
+//		
+//		return imageBytes;		
+//	}
+
 //	public void getCityByUuid() {
 //		
 ////		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/7061495d-f2bf-43e2-9f3b-e232b2a921b9?languages=en", String.class);

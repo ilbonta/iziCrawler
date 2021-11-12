@@ -72,12 +72,12 @@ public class ManipulateJSON {
 		log.debug("============= OBJ SERIALIZED: {}", objFileName);
 	}	
 
-	public static void persistIziObjectImage(byte[] imageBytes, String filePath, String ext) {
+	public static void persistIziObjectMedia(byte[] imageBytes, String filePath, String ext) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
 	    try {
 	    	BufferedImage bImage2 = ImageIO.read(bis);
 			ImageIO.write(bImage2, ext, new File(filePath));
-			log.debug("============= IMG SAVED: {}", filePath);
+			log.debug("============= MEDIA SAVED: {}", filePath);
 		} catch (IOException e) {
 			log.error("IO error", e);
 		}	

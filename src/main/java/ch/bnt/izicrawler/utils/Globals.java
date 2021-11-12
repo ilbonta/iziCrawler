@@ -35,6 +35,7 @@ public class Globals {
 	
 	public static final String IMG_LOGO_EXT = "jpg";
 	public static final String IMG_BRAND_LOGO_EXT = "png";
+	public static final String AUDIO_EXT = "m4a";
 
 	public static final String GET_PUBLISHER = PROTOCOL +DOMAIN +MTG +"publisher/";
 	

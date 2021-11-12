@@ -60,23 +60,23 @@ public class ClientController {
 		return mav;
 	}
 	
-	@GetMapping("/media")
-	public ResponseEntity<String> getMediaByUuid(
-			@RequestParam(name="contentProviderUuid") String contentProviderUuid,
-			@RequestParam(name="imageUuid") String imageUuid,
-			@RequestParam(name="type") String type,
-			@RequestParam(name="ext") String ext) {
-		
-        String folderName = "temp";
-		
-		byte[] imageBytes = endpointCaller.getMedia(contentProviderUuid, imageUuid, ext);
-		
-		String jsonFileName = folderName +"_" +type +"." +ext;	
-		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +"img" +File.separator +jsonFileName;
-		ManipulateJSON.persistIziObjectImage(imageBytes, filePath, ext);
-		
-		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
-	}
+//	@GetMapping("/media")
+//	public ResponseEntity<String> getMediaByUuid(
+//			@RequestParam(name="contentProviderUuid") String contentProviderUuid,
+//			@RequestParam(name="imageUuid") String imageUuid,
+//			@RequestParam(name="type") String type,
+//			@RequestParam(name="ext") String ext) {
+//		
+//        String folderName = "temp";
+//		
+//		byte[] imageBytes = endpointCaller.getMedia(contentProviderUuid, imageUuid, ext);
+//		
+//		String jsonFileName = folderName +"_" +type +"." +ext;	
+//		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +"img" +File.separator +jsonFileName;
+//		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, ext);
+//		
+//		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
+//	}
 	
 	@GetMapping("/publisher")
 	public ModelAndView getPublisherByUuid(@RequestParam(name="uuid") String uuid) {
