@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Getting Started: Serving Web Content</title>
+</head>
+<body>
+	<div class="container-fluid">
+		<br />
+		<div class="row">
+			<div class="col-8">
+				<form action="/museum" method="get">
+					<b>By search Key Word:</b><br />
+					<label>searchKeyWord:</label> <input type="text"
+						name="searchKeyWord" value="Musée international d'horlogerie"
+						style="width: 500px"> <input type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col">
+				<form action="/uuidMin" method="get">
+					<b>By UUid minimal:</b><br />
+					
+					<label>Uuid:</label>
+					<input type="text" name="uuid" value="" style="width: 500px">
+					
+					<label>lang:</label>
+					<select name="lang" id="lang">
+					  <option value="en" selected="selected">English</option>
+					  <option value="it">Italiano</option>
+					  <option value="fr">Français</option>
+					  <option value="de">Deutsch</option>
+					  <option value="es">Español</option>
+					</select>
+					
+					<input type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col">
+				<form action="/uuidAll" method="get">
+					<b>By UUid all:<br /> <label>Uuid:</label> <input type="text"
+						name="uuid" value="" style="width: 500px"> <input
+						type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col">
+				<form action="/media" method="get">
+					<b>Media By UUid:</b><br />
+					<label>content provider Uuid:</label>
+					<input type="text" name="contentProviderUuid" value="8a6db7f5-da67-4652-9172-bbe4a96f47e8" style="width: 500px"><br />
+					<label>image Uuid:</label>
+					<input type="text" name="imageUuid" value="b23985b4-9d0c-4637-953b-352ccc11738d" style="width: 500px"><br />
+					<select name="type">
+						<option value="brand_logo" default>brand_logo</option>
+						<option value="sponsor_logo">sponsor_logo</option>
+						<option value="story">story</option>
+						<option value="map">map</option>
+						<option value="brand_cover">brand_cover</option>
+					</select><br />
+					<select name="ext">
+						<option value="jpg">.jpg</option>
+						<option value="png" default>.png</option>
+						<option value="ma4">.m4a</option>
+					</select><br />
+					<input type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col">
+				<form action="/publisher" method="get">
+					<b>Publisher By UUid:</b><br /> <label>Uuid:</label> <input
+						type="text" name="uuid"
+						value="221a9e75-24e4-4c87-9e6b-668ed501cd74" style="width: 500px">
+					<input type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
+
+</body>
+</html>
