@@ -22,7 +22,7 @@ public class EndpointCaller {
 		String url = Globals.SEARCH_CITY_ENDPOINT + "geneva";
 		
 //		ResponseEntity<String> response = restTemplate.getForEntity(Globals.CITY_ENDPOINT + "geneva", String.class);	
-//		ManipulateJSON.printReadableJSON(response);
+//		ManipulateData.printReadableJSON(response);
 	
 		QuerySearchObj[] cities = restTemplate.getForObject(url, QuerySearchObj[].class);
 		
@@ -120,7 +120,7 @@ public class EndpointCaller {
 //	public void getCityByUuid() {
 //		
 ////		ResponseEntity<String> response = restTemplate.getForEntity("https://api.izi.travel/mtgobjects/7061495d-f2bf-43e2-9f3b-e232b2a921b9?languages=en", String.class);
-////		ManipulateJSON.printReadableJSON(response);
+////		ManipulateData.printReadableJSON(response);
 //		String url = "https://api.izi.travel/mtgobjects/ebbd4c2a-f6b2-46b5-aaee-2347707152d8?languages=en";
 //		
 //		IziObject[] izis = restTemplate.getForObject(url, IziObject[].class);

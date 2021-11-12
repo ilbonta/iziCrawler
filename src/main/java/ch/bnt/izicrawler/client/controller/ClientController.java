@@ -66,7 +66,7 @@ public class ClientController {
 //		
 //		String jsonFileName = folderName +"_" +type +"." +ext;	
 //		String filePath = Globals.MAIN_OUTPUT_FOLDER +folderName +File.separator +"img" +File.separator +jsonFileName;
-//		ManipulateJSON.persistIziObjectMedia(imageBytes, filePath, ext);
+//		ManipulateData.persistIziObjectMedia(imageBytes, filePath, ext);
 //		
 //		return new ResponseEntity<String>("File Downloaded Successfully", HttpStatus.OK);
 //	}
